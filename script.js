@@ -298,7 +298,7 @@ function importDataGuru(e) {
         
         for(let i=1; i<rows.length; i++) {
             if(!rows[i].trim()) continue; const col = rows[i].split(rgx).map(c=>c.replace(/"/g,'').trim());
-            if(col.length >= 2 && col[0]!=="") { // Minimal ada Nama dan Mapel
+            if(col.length >= 2 && col[0]!=="") { 
                 const guruName = col[0].trim();
                 const mapelRawArr = col[1].split(',').map(m => m.trim()).filter(m => m !== "");
                 const mapelCleanStr = mapelRawArr.join(', ');
@@ -310,7 +310,6 @@ function importDataGuru(e) {
                 }
                 
                 let tot=0, rin={};
-                // Tetap masukkan guru meskipun JP-nya 0 di file CSV (untuk diedit nanti)
                 for(let j=startIndex; j<col.length; j++) { 
                     let jp=parseInt(col[j])||0; 
                     if(cls[j-startIndex]) { rin[cls[j-startIndex]] = jp; tot+=jp; } 
@@ -330,7 +329,6 @@ function importDataGuru(e) {
     }; r.readAsText(f);
 }
 
-// FUNGSI UPDATE JP REAL-TIME OLEH USER
 window.updateJPGuru = function(guruIdx, kelas, value) {
     let val = parseInt(value) || 0;
     schoolData.guru[guruIdx].rincian[kelas] = val;
@@ -341,15 +339,12 @@ window.updateJPGuru = function(guruIdx, kelas, value) {
     }
     schoolData.guru[guruIdx].total = tot;
     
-    // Update label total tanpa merender ulang seluruh tabel agar tidak kehilangan fokus kursor
     let elTotal = document.getElementById(`total_guru_${guruIdx}`);
     if(elTotal) elTotal.innerHTML = `<strong>${tot}</strong>`;
 }
 
-// TABEL GURU SEKARANG BERBENTUK INPUT EDITABLE
 function renderTabelGuru() {
     let setCls = new Set(); 
-    // Ambil header kolom dari mapel agar formatnya konsisten
     schoolData.mapel.forEach(m => setCls.add(m.kelas));
     schoolData.guru.forEach(g=>Object.keys(g.rincian).forEach(k=>setCls.add(k))); 
     const uCls = Array.from(setCls);
@@ -367,7 +362,6 @@ function renderTabelGuru() {
                 
         uCls.forEach(c => {
             let jpVal = g.rincian[c] || 0;
-            // Kolom Input Editable
             h+=`<td><input type="number" min="0" style="width:50px; text-align:center; padding:5px; border:1px solid #cbd5e1; border-radius:4px; font-weight:600; color:var(--primary);" value="${jpVal}" onchange="updateJPGuru(${idx}, '${c}', this.value)" onkeyup="updateJPGuru(${idx}, '${c}', this.value)"></td>`;
         });
         
@@ -376,9 +370,6 @@ function renderTabelGuru() {
     document.getElementById('previewGuru').innerHTML = h+`</table></div>`;
 }
 
-// ==========================================
-// MAGIC FEATURE: AUTO DISTRIBUSI JP GURU
-// ==========================================
 window.autoDistribusiGuru = function() {
     if(schoolData.mapel.length === 0) {
         return showAlert("Data Mapel (Step 5) masih kosong!", "error");
@@ -387,13 +378,11 @@ window.autoDistribusiGuru = function() {
         return showAlert("Upload daftar Guru (Step 6) terlebih dahulu!", "error");
     }
 
-    // 1. Reset Semua JP Guru Menjadi 0
     schoolData.guru.forEach(g => {
         for(let k in g.rincian) { g.rincian[k] = 0; }
         g.total = 0;
     });
 
-    // 2. Hitung Kebutuhan JP per Mapel untuk PA dan PI
     let kebutuhan = {};
     schoolData.mapel.forEach(m => {
         if(!kebutuhan[m.mapel]) kebutuhan[m.mapel] = {};
@@ -414,7 +403,6 @@ window.autoDistribusiGuru = function() {
         kebutuhan[m.mapel][m.kelas].PI += (m.jp * totalRombelPI);
     });
 
-    // 3. Eksekusi Pembagian JP
     for(let mapel in kebutuhan) {
         for(let kelas in kebutuhan[mapel]) {
             let butuhPA = kebutuhan[mapel][kelas].PA;
@@ -424,7 +412,6 @@ window.autoDistribusiGuru = function() {
             let guruPI = schoolData.guru.filter(g => g.mapelsArr.includes(mapel) && g.target === 'PI');
             let guruBebas = schoolData.guru.filter(g => g.mapelsArr.includes(mapel) && g.target === 'BEBAS');
 
-            // Alokasi PA ke Guru PA
             if(guruPA.length > 0 && butuhPA > 0) {
                let avg = Math.floor(butuhPA / guruPA.length);
                let sisa = butuhPA % guruPA.length;
@@ -436,7 +423,6 @@ window.autoDistribusiGuru = function() {
                butuhPA = 0;
             }
             
-            // Alokasi PI ke Guru PI
             if(guruPI.length > 0 && butuhPI > 0) {
                let avg = Math.floor(butuhPI / guruPI.length);
                let sisa = butuhPI % guruPI.length;
@@ -448,7 +434,6 @@ window.autoDistribusiGuru = function() {
                butuhPI = 0;
             }
             
-            // Alokasi Sisa (Jika ada) ke Guru BEBAS
             let sisaTotal = butuhPA + butuhPI;
             if(sisaTotal > 0 && guruBebas.length > 0) {
                let avg = Math.floor(sisaTotal / guruBebas.length);
@@ -466,10 +451,6 @@ window.autoDistribusiGuru = function() {
     showAlert("Distribusi JP Ideal berhasil dihitung!", "success");
 }
 
-
-// ==========================================
-// 8. MESIN ALGORITMA PENJADWALAN
-// ==========================================
 window.toggleModeSettings = function() { 
     const mode = document.getElementById('modeJadwal').value;
     const label = document.getElementById('labelSettingWaktu');
@@ -637,9 +618,6 @@ function eksekusiAlgoritmaJadwal() {
         });
     });
 
-    // ===============================================
-    // CABANG 1: MODE PTS & PAS/PAT 
-    // ===============================================
     if(mode === 'PTS' || mode === 'PAS') {
         
         let antreanMapelUjian = {};
@@ -687,7 +665,6 @@ function eksekusiAlgoritmaJadwal() {
                     let guruPengawas = null;
                     let isAdaUjian = (mapelK1 !== '-' || mapelK2 !== '-');
                     
-                    // Prioritas 1: Guru Pengampu
                     if(mapelK1 !== '-') {
                         let dataTugas = pemetaanTugas[r.k1.id][mapelK1];
                         if(dataTugas && dataTugas.guru !== "BELUM DISET") guruPengawas = dataTugas.guru;
@@ -701,7 +678,6 @@ function eksekusiAlgoritmaJadwal() {
                         guruPengawas = null; 
                     } 
 
-                    // Prioritas 2: Cari Pengawas Pengganti (Mematuhi Aturan Gender PA/PI)
                     if(!guruPengawas && isAdaUjian) {
                         let isRuangPA = r.id.includes('(PA)');
                         let isRuangPI = r.id.includes('(PI)');
@@ -880,8 +856,11 @@ function eksekusiAlgoritmaJadwal() {
             logValidasiUjian.forEach(log => { htmlValidasi += `<tr><td><strong>${log.kelas}</strong></td><td style="color:white; background:var(--danger);"><b>${log.mapel}</b></td><td style="text-align:center; font-weight:bold;">${log.butuh}</td><td>${log.alasan}</td></tr>`; });
             htmlValidasi += `</table></div></div>`;
         } else {
-            htmlValidasi += `<div style="text-align:center; padding:40px; color:var(--success); background:#ecfdf5; border-radius:8px; border:1px solid #a7f3d0;">
-                                <h3 style="margin-top:0;">🎉 Analisis Sempurna!</h3><p>Semua mata pelajaran ujian memiliki guru pengawas yang valid tanpa ada bentrok waktu.</p></div>`;
+            // PERBAIKAN: Kotak bersih dengan teks elegan (Tanpa Box Merah)
+            htmlValidasi += `<div style="text-align:center; padding:40px; color:var(--success); background:white; border-radius:8px; border:2px dashed var(--success);">
+                                <h3 style="margin-top:0; font-size:24px;">✅ Sempurna (0 Error)</h3>
+                                <p style="font-weight:600; color:#475569;">Semua jadwal ujian memiliki pengawas valid tanpa bentrok!</p>
+                             </div>`;
         }
 
         let outputHTML = `
@@ -1124,8 +1103,11 @@ function eksekusiAlgoritmaJadwal() {
         logValidasi.forEach(log => { htmlValidasi += `<tr><td><strong>${log.kelas}</strong></td><td style="color:#fff; background:#c0392b;"><b>${log.mapel}</b></td><td style="text-align:center; font-weight:bold;">${log.butuh}</td><td>${log.alasan}</td></tr>`; });
         htmlValidasi += `</table></div></div>`;
     } else {
-        htmlValidasi += `<div style="text-align:center; padding:40px; color:var(--success); background:#ecfdf5; border-radius:8px; border:1px solid #a7f3d0;">
-                            <h3 style="margin-top:0;">🎉 Sempurna (0 Error)!</h3><p>Berhasil menemukan kombinasi terbaik. Tidak ada bentrok dan semua jadwal ter-plot.</p></div>`;
+        // PERBAIKAN: UI Bersih untuk status "0 Error" di Jadwal KBM
+        htmlValidasi += `<div style="text-align:center; padding:40px; color:var(--success); background:white; border-radius:8px; border:2px dashed var(--success);">
+                            <h3 style="margin-top:0; font-size:24px;">✅ Sempurna (0 Error)</h3>
+                            <p style="font-weight:600; color:#475569;">Berhasil menemukan kombinasi terbaik. Semua mapel ter-plot tanpa bentrok!</p>
+                         </div>`;
     }
 
     let outputHTML = `
