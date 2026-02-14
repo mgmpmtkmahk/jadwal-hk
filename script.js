@@ -618,6 +618,9 @@ function eksekusiAlgoritmaJadwal() {
         });
     });
 
+    // ===============================================
+    // CABANG 1: MODE PTS & PAS/PAT 
+    // ===============================================
     if(mode === 'PTS' || mode === 'PAS') {
         
         let antreanMapelUjian = {};
@@ -856,7 +859,6 @@ function eksekusiAlgoritmaJadwal() {
             logValidasiUjian.forEach(log => { htmlValidasi += `<tr><td><strong>${log.kelas}</strong></td><td style="color:white; background:var(--danger);"><b>${log.mapel}</b></td><td style="text-align:center; font-weight:bold;">${log.butuh}</td><td>${log.alasan}</td></tr>`; });
             htmlValidasi += `</table></div></div>`;
         } else {
-            // PERBAIKAN: Kotak bersih dengan teks elegan (Tanpa Box Merah)
             htmlValidasi += `<div style="text-align:center; padding:40px; color:var(--success); background:white; border-radius:8px; border:2px dashed var(--success);">
                                 <h3 style="margin-top:0; font-size:24px;">✅ Sempurna (0 Error)</h3>
                                 <p style="font-weight:600; color:#475569;">Semua jadwal ujian memiliki pengawas valid tanpa bentrok!</p>
@@ -1041,7 +1043,12 @@ function eksekusiAlgoritmaJadwal() {
                      </div>`;
     
     let statBoxId = "stat-kosong";
-    htmlHasil += `<div class="stat-box" style="display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; background: var(--dark); color: white; border-radius: 6px; margin-bottom: 20px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">🕒 Terdapat <span style="font-size: 24px; color: #facc15;" id="${statBoxId}">0</span> Jam Pelajaran Kosong secara keseluruhan minggu ini.</div>`;
+    
+    // PERBAIKAN: BOX HITAM DIHAPUS, TINGGAL TEKS ELEGAN
+    htmlHasil += `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600; color: #475569; font-size: 15px;">
+                    <span style="font-size: 20px;">🕒</span> 
+                    Terdapat <strong style="font-size: 20px; color: var(--danger);" id="${statBoxId}">0</strong> Jam Pelajaran Kosong secara keseluruhan minggu ini.
+                  </div>`;
 
     semuaKelasFisikObj.forEach(kf => {
         htmlHasil += `<div class="jadwal-wrapper" data-group="${kf.group}">
@@ -1103,7 +1110,7 @@ function eksekusiAlgoritmaJadwal() {
         logValidasi.forEach(log => { htmlValidasi += `<tr><td><strong>${log.kelas}</strong></td><td style="color:#fff; background:#c0392b;"><b>${log.mapel}</b></td><td style="text-align:center; font-weight:bold;">${log.butuh}</td><td>${log.alasan}</td></tr>`; });
         htmlValidasi += `</table></div></div>`;
     } else {
-        // PERBAIKAN: UI Bersih untuk status "0 Error" di Jadwal KBM
+        // PERBAIKAN: Kotak bersih dengan teks elegan (Tanpa Box Merah) di Jadwal KBM
         htmlValidasi += `<div style="text-align:center; padding:40px; color:var(--success); background:white; border-radius:8px; border:2px dashed var(--success);">
                             <h3 style="margin-top:0; font-size:24px;">✅ Sempurna (0 Error)</h3>
                             <p style="font-weight:600; color:#475569;">Berhasil menemukan kombinasi terbaik. Semua mapel ter-plot tanpa bentrok!</p>
