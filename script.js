@@ -349,7 +349,7 @@ function renderTabelGuru() {
     schoolData.guru.forEach(g=>Object.keys(g.rincian).forEach(k=>setCls.add(k))); 
     const uCls = Array.from(setCls);
     
-    let h=`<div style="overflow-x:auto;"><table class="table-preview table-guru"><tr><th style="text-align:center;">Nama Guru</th><th style="text-align:center;">Mata Pelajaran</th><th style="text-align:center;">Fokus Kls</th>${uCls.map(c=>`<th style="text-align:center;">${c}</th>`).join('')}<th style="text-align:center; width:80px;">Total JP</th></tr>`;
+    let h=`<div style="overflow-x:auto;"><table class="table-preview table-guru"><tr><th style="text-align:center;">Nama Guru</th><th style="text-align:center;">Mata Pelajaran</th><th style="text-align:center;">Fokus Kelas</th>${uCls.map(c=>`<th style="text-align:center;">${c}</th>`).join('')}<th style="text-align:center; width:80px;">Total JP</th></tr>`;
     
     schoolData.guru.forEach((g, idx) => { 
         let badgeColor = g.target==='PA' ? '#3b82f6' : (g.target==='PI' ? '#ec4899' : '#64748b');
