@@ -30,7 +30,8 @@
             <div class="sidebar-footer">
                 <button id="btnCleanDraft" class="btn-sidebar-action">🗑️ Reset Aplikasi</button>
                 <button id="btnBackup" class="btn-sidebar-action">⬇️ Backup Data JSON</button>
-                <label class="btn-sidebar-action" style="margin:0;">⬆️ Restore JSON <input type="file" id="inputRestore" accept=".json" style="display:none;"></label>
+                <button class="btn-sidebar-action" onclick="document.getElementById('inputRestore').click()">⬆️ Restore JSON</button>
+                <input type="file" id="inputRestore" accept=".json" style="display:none;">
                 <button id="btnDarkMode" class="btn-sidebar-action" onclick="toggleDarkMode()">🌙 Dark Mode</button>
             </div>
         </aside>
@@ -97,7 +98,7 @@
                     </div>
 
                     <div class="card-box">
-                        <h3>Penguncian Waktu Khusus (Opsional)</h3>
+                        <h3>Penguncian Waktu Mapel Khusus (Opsional)</h3>
                         <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
                             <div style="flex: 2; min-width: 200px;">
                                 <label>1. Pilih Nama Mapel:</label>
@@ -121,7 +122,7 @@
                         <div class="preview-box" style="margin-top: 25px;">
                             <table id="tabelLockMapel">
                                 <thead><tr><th style="text-align:center;">Mata Pelajaran</th><th style="text-align:center;">Wajib di Hari</th><th style="text-align:center;">Wajib di Jam Ke-</th><th style="text-align:center; width:100px;">Aksi</th></tr></thead>
-                                <tbody id="bodyLockMapel"><tr><td colspan="4" class="empty-text" style="text-align:center; padding: 20px;">Belum ada mapel terkunci.</td></tr></tbody>
+                                <tbody id="bodyLockMapel"><tr><td colspan="4" style="color: #94a3b8; font-weight: normal !important; font-style: italic !important; text-align:center; padding: 20px;">Belum ada mapel yang dikunci waktunya.</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -135,7 +136,7 @@
                         <div class="preview-box">
                             <table id="tabelFasilitas">
                                 <thead><tr><th style="text-align:left;">Mata Pelajaran (Fasilitas Terbatas)</th><th style="text-align:center; width:100px;">Aksi</th></tr></thead>
-                                <tbody id="bodyFasilitas"><tr><td colspan="2" class="empty-text" style="text-align:center; padding: 20px;">Belum ada mapel fasilitas terbatas.</td></tr></tbody>
+                                <tbody id="bodyFasilitas"><tr><td colspan="2" style="color: #94a3b8; font-weight: normal !important; font-style: normal !important; text-align:center; padding: 20px;">Belum ada mapel fasilitas terbatas.</td></tr></tbody>
                             </table>
                         </div>
                     </div>

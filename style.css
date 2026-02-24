@@ -127,7 +127,7 @@ h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
 .card-box:hover { box-shadow: var(--shadow-md); transform: translateY(-2px);}
 .card-box h3 { margin: 0 0 25px 0; font-size: 16px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 1px;}
 .card-box h3::before { content: ''; display: block; width: 6px; height: 20px; background: var(--primary); border-radius: 4px; }
-.empty-text { color: #94a3b8; font-style: italic; margin: 0; font-size: 14.5px; padding: 10px 0;}
+.empty-text { color: #94a3b8; font-style: normal; margin: 0; font-size: 14.5px; padding: 10px 0;}
 
 label { display: block; font-weight: 700; margin-bottom: 10px; font-size: 14px; color: var(--text-main);}
 
@@ -323,8 +323,6 @@ body.dark-mode .btn-import:hover, body.dark-mode .btn-sm:hover, body.dark-mode .
     border-color: #94a3b8 !important;
 }
 body.dark-mode .btn-clean:hover { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important;}
-body.dark-mode .btn-save { color: var(--success) !important; border-color: var(--success) !important; }
-body.dark-mode .btn-save:hover { background: var(--success) !important; color: white !important; }
 body.dark-mode .btn-sidebar-action:hover { background: #334155; color: #f8fafc; }
 
 /* Navigasi Tab Hasil Generate */
@@ -413,7 +411,7 @@ body.dark-mode .btn-save, body.dark-mode .btn-save * { color: var(--success) !im
 body.dark-mode .btn-save:hover, body.dark-mode .btn-save:hover * { color: white !important; background: var(--success) !important; }
 body.dark-mode .btn-clean, body.dark-mode .btn-clean * { color: var(--danger) !important; }
 body.dark-mode .btn-clean:hover, body.dark-mode .btn-clean:hover * { color: white !important; background: var(--danger) !important; }
-body.dark-mode .empty-text { color: #94a3b8 !important; font-style: italic !important; }
+body.dark-mode .empty-text { color: #94a3b8 !important; font-style: normal !important; font-weight: 500 !important; }
 body.dark-mode .nav-btn.active { color: var(--secondary) !important; }
 body.dark-mode .btn-action { color: white !important; }
 body.dark-mode .global-kop-surat * { color: #000 !important; } /* Kop surat khusus print tetap hitam */
@@ -449,21 +447,22 @@ body.dark-mode .guru-name {
 }
 
 /* =========================================
-   FIX FINAL: SIDEBAR BAWAH & BADGE GURU
+   FIX FINAL: NORMALISASI TEKS & KONSISTENSI
    ========================================= */
-
-/* 1. Menyeragamkan semua tombol di pojok kiri bawah (Sidebar Footer) */
+.btn-sidebar-action,
 body.dark-mode .btn-sidebar-action {
-    color: #94a3b8 !important; /* Warna abu-abu elegan (redup) */
+    font-weight: 600 !important;
+    font-style: normal !important;
 }
-body.dark-mode .btn-sidebar-action:hover {
-    color: #f8fafc !important; /* Menyala putih saat dilewati mouse */
-    background: #334155 !important;
-}
+body.dark-mode .btn-sidebar-action { color: #94a3b8 !important; }
+body.dark-mode .btn-sidebar-action:hover { color: #f8fafc !important; background: #334155 !important; }
 
-/* 2. Memperbaiki Badge Nama Guru di dalam jadwal yang warnanya nyangkut */
-body.dark-mode .guru-name {
-    background: #1e293b !important; /* Latar belakang gelap menyatu dengan tabel */
-    color: #38bdf8 !important; /* Teks warna biru muda bercahaya (Sky Blue) */
-    border: 1px solid #334155 !important; /* Garis batas tipis */
+.empty-text, 
+#bodyFasilitas td, 
+#bodyBatasan td {
+    font-style: normal !important;
+    font-weight: 500 !important;
+}
+body.dark-mode .empty-text { 
+    color: #94a3b8 !important; 
 }

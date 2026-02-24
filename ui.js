@@ -177,16 +177,6 @@ window.prosesDataRombel = function() {
     showAlert("Data Rombel selesai & tersimpan! Silakan pindah ke menu '2. Data Mapel' di kiri.", "success");
 }
 
-function validateCurrentStep() {
-    if(currentStep===1){ const v=document.getElementById('inputTingkat').value.trim(); if(!v) return showAlert("Isi Tingkat Kelas!","error"),false; schoolData.tingkat=v.split(',').map(s=>s.trim()); }
-    else if(currentStep===2){ schoolData.jurusan={}; for(let tk of schoolData.tingkat){ const v=document.getElementById(`jurusan_${tk}`).value.trim(); if(!v) return showAlert(`Jurusan ${tk} kosong!`,"error"),false; schoolData.jurusan[tk]=v.split(',').map(s=>s.trim()); } }
-    else if(currentStep===3){ schoolData.paralel={}; for(let tk of schoolData.tingkat) for(let jur of schoolData.jurusan[tk]){ const k=`${tk}-${jur}`,v=document.getElementById(`paralel_${k}`).value; if(!v||v<1) return showAlert(`Paralel ${tk} ${jur} tidak valid!`,"error"),false; schoolData.paralel[k]=parseInt(v); } }
-    else if(currentStep===4){ schoolData.split={}; for(let k in schoolData.paralel){ const t=schoolData.paralel[k], pa=parseInt(document.getElementById(`split_pa_${k}`).value)||0, pi=parseInt(document.getElementById(`split_pi_${k}`).value)||0; if(pa+pi!==t) return showAlert(`Total PA+PI di ${k} harus = ${t}!`,"error"),false; schoolData.split[k]={pa,pi}; } }
-    else if(currentStep===5 && schoolData.mapel.length===0) return showAlert("Anda belum Import Matriks Mapel!","error"),false;
-    else if(currentStep===6 && schoolData.guru.length===0) return showAlert("Anda belum Import Matriks Guru!","error"),false;
-    return true;
-}
-
 function prepareNextStepData(ns) {
     if(ns===2){ let h=''; schoolData.tingkat.forEach(tk=>{ h+=`<div class="dynamic-row"><label>Rincian Kelas ${tk}:</label><input type="text" id="jurusan_${tk}" placeholder="Contoh: IPA, IPS atau Tidak Ada"></div>`; }); document.getElementById('formJurusanArea').innerHTML=h; }
     else if(ns===3){ let h=''; schoolData.tingkat.forEach(tk=>schoolData.jurusan[tk].forEach(jur=>{ const lbl=jur.toLowerCase()==='tidak ada'?tk:`${tk} ${jur}`; h+=`<div class="dynamic-row"><label>Jumlah Rombel ${lbl}:</label><input type="number" id="paralel_${tk}-${jur}" min="1"></div>`; })); document.getElementById('formParalelArea').innerHTML=h; }
@@ -246,25 +236,6 @@ window.hapusBatasan = function(idx) {
     schoolData.batasan.splice(idx, 1);
     renderBatasan();
     saveDraft(true); // Simpan otomatis saat dihapus
-}
-
-window.renderBatasan = function() {
-    let tbody = document.getElementById('bodyBatasan');
-    if(!schoolData.batasan || schoolData.batasan.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="color: #94a3b8; text-align:center;">Belum ada batasan waktu yang ditambahkan.</td></tr>';
-        return;
-    }
-    let html = '';
-    schoolData.batasan.forEach((b, idx) => {
-        let infoJam = b.jam ? `Sesi / Jam Ke: <b style="color:var(--dark); background:#e2e8f0; padding:2px 6px; border-radius:4px;">${b.jam}</b>` : '<b style="color:var(--danger); background:#fee2e2; padding:2px 6px; border-radius:4px;">Izin Seharian</b>';
-        html += `<tr>
-            <td style="text-align:left; font-weight:700; color:var(--primary); padding-left:15px;">${b.guru}</td>
-            <td style="text-align:center;">${b.hari}</td>
-            <td style="text-align:center;">${infoJam}</td>
-            <td style="text-align:center;"><button onclick="hapusBatasan(${idx})" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:12px;">Hapus 🗑️</button></td>
-        </tr>`;
-    });
-    tbody.innerHTML = html;
 }
 
 function isGuruRestricted(guruName, hariStr, sesi) {
@@ -728,11 +699,36 @@ window.hapusLockMapel = function(idx) {
     saveDraft(true);
 }
 
+// ==========================================
+// RENDER TABEL BATASAN GURU
+// ==========================================
+window.renderBatasan = function() {
+    let tbody = document.getElementById('bodyBatasan');
+    if(!schoolData.batasan || schoolData.batasan.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="color:#94a3b8; font-weight:normal !important; font-style:normal !important; text-align:center; padding:20px;">Belum ada batasan waktu yang ditambahkan.</td></tr>';
+        return;
+    }
+    let html = '';
+    schoolData.batasan.forEach((b, idx) => {
+        let infoJam = b.jam ? `Sesi / Jam Ke: <b style="color:var(--dark); background:#e2e8f0; padding:2px 6px; border-radius:4px;">${b.jam}</b>` : '<b style="color:var(--danger); background:#fee2e2; padding:2px 6px; border-radius:4px;">Izin Seharian</b>';
+        html += `<tr>
+            <td style="text-align:left; font-weight:700; color:var(--primary); padding-left:15px;">${b.guru}</td>
+            <td style="text-align:center;">${b.hari}</td>
+            <td style="text-align:center;">${infoJam}</td>
+            <td style="text-align:center;"><button onclick="hapusBatasan(${idx})" style="background:var(--danger); color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:12px;">Hapus 🗑️</button></td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+// ==========================================
+// RENDER TABEL KUNCI MAPEL
+// ==========================================
 window.renderLockMapel = function() {
     let tbody = document.getElementById('bodyLockMapel');
     if(!tbody) return;
     if(!schoolData.lockMapel || schoolData.lockMapel.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="color: #94a3b8; text-align:center; padding: 20px;">Belum ada mapel yang dikunci waktunya.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="color:#94a3b8; font-weight:normal !important; font-style:italic !important; text-align:center; padding:20px;">Belum ada mapel yang dikunci waktunya.</td></tr>';
         return;
     }
     let html = '';
@@ -748,31 +744,13 @@ window.renderLockMapel = function() {
 }
 
 // ==========================================
-// FITUR FASILITAS TERBATAS (RUANG BERBAGI)
+// RENDER TABEL FASILITAS TERBATAS
 // ==========================================
-window.tambahFasilitas = function() {
-    let mapel = document.getElementById('fasilitasMapel').value;
-    if(!mapel) return showAlert("Pilih mapel terlebih dahulu!", "warning");
-    if(!schoolData.fasilitas) schoolData.fasilitas = [];
-    if(schoolData.fasilitas.includes(mapel)) return showAlert("Mapel ini sudah masuk daftar!", "warning");
-    
-    schoolData.fasilitas.push(mapel);
-    renderFasilitas(); 
-    saveDraft(true);
-    showAlert(`Mapel ${mapel} diset sebagai Fasilitas Terbatas!`, "success");
-}
-
-window.hapusFasilitas = function(idx) {
-    schoolData.fasilitas.splice(idx, 1);
-    renderFasilitas(); 
-    saveDraft(true);
-}
-
 window.renderFasilitas = function() {
     let tbody = document.getElementById('bodyFasilitas');
     if(!tbody) return;
     if(!schoolData.fasilitas || schoolData.fasilitas.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="2" class="empty-text" style="text-align:center; padding: 15px;">Belum ada mapel fasilitas terbatas.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="2" style="color:#94a3b8; font-weight:normal !important; font-style:italic !important; text-align:center; padding:20px;">Belum ada mapel fasilitas terbatas.</td></tr>';
         return;
     }
     let html = '';
@@ -866,4 +844,30 @@ window.cetakJadwalIndividu = function(btnElement) {
     
     clone.remove();
     style.remove();
+}
+
+// ==========================================
+// FITUR FASILITAS TERBATAS (BARU DITAMBAHKAN)
+// ==========================================
+window.tambahFasilitas = function() {
+    let mapel = document.getElementById('fasilitasMapel').value;
+    if(!mapel) return showAlert("Pilih mapel terlebih dahulu!", "warning");
+    
+    if(!schoolData.fasilitas) schoolData.fasilitas = [];
+    
+    // Cek agar tidak memasukkan mapel yang sama dua kali
+    if(schoolData.fasilitas.includes(mapel)) {
+        return showAlert(`Mapel ${mapel} sudah ada di daftar fasilitas!`, "warning");
+    }
+    
+    schoolData.fasilitas.push(mapel);
+    renderFasilitas();
+    saveDraft(true);
+    showAlert(`Mapel ${mapel} ditambahkan sebagai fasilitas terbatas.`, "success");
+}
+
+window.hapusFasilitas = function(idx) {
+    schoolData.fasilitas.splice(idx, 1);
+    renderFasilitas();
+    saveDraft(true);
 }
