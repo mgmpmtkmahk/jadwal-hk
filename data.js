@@ -28,8 +28,8 @@ function loadDraft(silent = false) {
 }
 
 function downloadProgressFile() {
-    try{ if(currentStep<5) validateCurrentStep(); }catch(e){}
-    const dataStr = JSON.stringify({ step: currentStep, data: schoolData }, null, 2);
+    // Menyimpan murni data aplikasi tanpa mempedulikan urutan step lagi
+    const dataStr = JSON.stringify({ data: schoolData }, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = `Backup_Jadwal_${new Date().getTime()}.json`;
@@ -43,15 +43,24 @@ function uploadProgressFile(event) {
     reader.onload = function(e) {
         try {
             const parsed = JSON.parse(e.target.result);
-            if(parsed.data && parsed.step) {
-                schoolData = parsed.data; currentStep = parsed.step;
+            
+            // Mendukung file backup lama (yang ada step-nya) maupun file backup baru
+            if(parsed.data || parsed.step) {
+                schoolData = parsed.data || parsed; // Mengambil data inti
                 if(!schoolData.batasan) schoolData.batasan = [];
-                repopulateUI(); showStep(currentStep); 
-                showAlert("File Backup berhasil dibaca!", "success");
+                
+                repopulateUI(); // Mengisi ulang semua form & tabel dengan data baru
+                saveDraft(true); // Langsung simpan ke local storage agar permanen
+                
+                showAlert("File Backup berhasil dibaca dan di-restore!", "success");
+                
+                // Reset input file agar bisa dipakai upload file yang sama lagi jika perlu
+                document.getElementById('inputRestore').value = ""; 
             } else { 
                 showAlert("Format file JSON tidak sesuai!", "error"); 
             }
         } catch(err) { 
+            console.error(err); // Menampilkan error asli di console (F12) jika terjadi sesuatu
             showAlert("Gagal memproses file JSON.", "error"); 
         }
     };
