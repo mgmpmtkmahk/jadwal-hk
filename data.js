@@ -1,7 +1,6 @@
 // ==========================================
 // VARIABEL GLOBAL & STATE APLIKASI
 // ==========================================
-const totalSteps = 9; 
 let currentStep = 1;
 let schoolData = { tingkat: [], jurusan: {}, paralel: {}, split: {}, mapel: [], guru: [], batasan: [] };
 let confirmCallback = null;

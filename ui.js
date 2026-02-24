@@ -179,8 +179,8 @@ window.prosesDataRombel = function() {
 
 function prepareNextStepData(ns) {
     if(ns===2){ let h=''; schoolData.tingkat.forEach(tk=>{ h+=`<div class="dynamic-row"><label>Rincian Kelas ${tk}:</label><input type="text" id="jurusan_${tk}" placeholder="Contoh: IPA, IPS atau Tidak Ada"></div>`; }); document.getElementById('formJurusanArea').innerHTML=h; }
-    else if(ns===3){ let h=''; schoolData.tingkat.forEach(tk=>schoolData.jurusan[tk].forEach(jur=>{ const lbl=jur.toLowerCase()==='tidak ada'?tk:`${tk} ${jur}`; h+=`<div class="dynamic-row"><label>Jumlah Rombel ${lbl}:</label><input type="number" id="paralel_${tk}-${jur}" min="1"></div>`; })); document.getElementById('formParalelArea').innerHTML=h; }
-    else if(ns===4){ let h=''; for(let k in schoolData.paralel){ const t=schoolData.paralel[k], lbl=k.replace('-Tidak Ada',''); h+=`<div class="dynamic-row"><label>${lbl} (Total: ${t}):</label> Jml PA:<input type="number" id="split_pa_${k}" min="0"> Jml PI:<input type="number" id="split_pi_${k}" min="0"></div>`; } document.getElementById('formSplitArea').innerHTML=h; }
+    else if(ns===3){ let h=''; schoolData.tingkat.forEach(tk=>schoolData.jurusan[tk].forEach(jur=>{ const lbl=jur.toLowerCase()==='tidak ada'?tk:`${tk} ${jur}`; h+=`<div class="dynamic-row"><label>Jumlah Rombel Kelas ${lbl}:</label><input type="number" id="paralel_${tk}-${jur}" min="1"></div>`; })); document.getElementById('formParalelArea').innerHTML=h; }
+    else if(ns===4){ let h=''; for(let k in schoolData.paralel){ const t=schoolData.paralel[k], lbl=k.replace('-Tidak Ada',''); h+=`<div class="dynamic-row"><label>${lbl} (Total: ${t}):</label> Jumlah Kelas Putra:<input type="number" id="split_pa_${k}" min="0"> Jumlah Kelas Putri:<input type="number" id="split_pi_${k}" min="0"></div>`; } document.getElementById('formSplitArea').innerHTML=h; }
     else if(ns===7){
         let opts = '<option value="">-- Pilih Guru Dulu --</option>';
         let sortedGuru = [...new Set(schoolData.guru.map(g=>g.nama))].sort();
@@ -418,13 +418,17 @@ window.renderTabelGuru = function() {
 window.toggleModeSettings = function() { 
     const mode = document.getElementById('modeJadwal').value;
     const label = document.getElementById('labelSettingWaktu');
+    const labelSesi = document.getElementById('labelSesiUjian'); // Memanggil span label yang baru kita beri ID
+
     if(mode === 'KBM') {
         label.innerText = 'SETTING WAKTU KBM:';
+        labelSesi.innerText = 'JP/Hari:'; // Ubah teks jadi JP
         document.getElementById('jmlHariUjian').value = 6;
         document.getElementById('jmlJPUjian').value = 9;
     } else {
         label.innerText = 'SETTING WAKTU UJIAN:';
-        document.getElementById('jmlHariUjian').value = 6;
+        labelSesi.innerText = 'Sesi/Hari:'; // Ubah teks jadi Sesi
+        document.getElementById('jmlHariUjian').value = 10;
         document.getElementById('jmlJPUjian').value = 2;
     }
 }
