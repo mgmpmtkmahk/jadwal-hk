@@ -214,7 +214,7 @@ tr:hover td { background-color: #f8fafc; }
     z-index: 100;
 }
 
-#toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
+#toast-container { position: fixed; bottom: 40px; center: 40px; z-index: 10000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
 .toast { padding: 16px 24px; border-radius: 16px; color: white; box-shadow: var(--shadow-float); font-weight: 700; font-size: 15px; animation: slideUpToast 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; display: flex; align-items: center; gap: 12px; font-family: 'Outfit';}
 .toast.success { background: var(--dark); border-left: 4px solid var(--success); } .toast.error { background: var(--danger); } .toast.warning { background: var(--warning); color: #000; }
 @keyframes slideUpToast { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
