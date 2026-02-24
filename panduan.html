@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Panduan - Sistem Penjadwalan Terpadu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 100%); 
+            padding: 40px 20px; 
+            overflow-y: auto; 
+            display: block; 
+            height: auto;
+        }
+        .guide-container { 
+            max-width: 850px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 50px 60px; 
+            border-radius: var(--radius-lg); 
+            box-shadow: var(--shadow-float); 
+            border: 1px solid var(--border); 
+        }
+        .guide-container h1 { color: var(--dark); font-size: 36px; margin-bottom: 5px; text-align: center; }
+        .guide-container h2 { color: var(--primary); font-size: 22px; margin-top: 40px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;}
+        .guide-container h3 { color: var(--dark); font-size: 18px; margin-top: 30px; display: flex; align-items: center; gap: 8px;}
+        .guide-container p, .guide-container li { font-size: 15.5px; line-height: 1.7; color: var(--text-main); margin-bottom: 15px; }
+        .guide-container ul, .guide-container ol { padding-left: 25px; margin-bottom: 20px;}
+        .guide-container li { margin-bottom: 10px; }
+        .guide-header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 4px solid var(--dark); }
+        .guide-header p { color: var(--text-muted); font-size: 18px; font-weight: 600; margin: 0;}
+        .back-btn:hover { background: #e2e8f0; color: var(--dark); transform: translateX(-5px);}
+        
+        body.dark-mode { background: #020617; }
+        body.dark-mode .guide-container { background: #0f172a; border-color: #334155; }
+        body.dark-mode .guide-container h1, body.dark-mode .guide-container h3 { color: #f8fafc; }
+        body.dark-mode .guide-container h2 { color: var(--secondary); border-color: #334155; }
+        body.dark-mode .guide-container p, body.dark-mode .guide-container li { color: #cbd5e1; }
+        body.dark-mode .guide-header { border-color: #334155; }
+    </style>
+</head>
+<body>
+
+    <div class="guide-container">
+        <a href="javascript:window.close();" class="btn-sm" id="btnTutup" style="display:none; background: var(--primary); color: white; border: none; text-decoration: none; height: 40px; padding: 0 15px; border-radius: 20px; margin-bottom: 30px;">⬅️ Tutup Panduan</a>
+        <a href="index.html" class="btn-sm" id="btnKembali" style="background: var(--primary); color: white; border: none; text-decoration: none; height: 40px; padding: 0 15px; border-radius: 20px; margin-bottom: 30px;">⬅️ Kembali ke Aplikasi</a>
+
+        <div class="guide-header">
+            <h1>📚 BUKU PANDUAN PENGGUNAAN</h1>
+            <p>Sistem Generator Jadwal Sekolah Terpadu A.I</p>
+            <p style="font-size: 14px; margin-top: 5px;">Pondok Pesantren Husnul Khotimah</p>
+        </div>
+
+        <p>Selamat datang di <strong>Sistem Penjadwalan Terpadu!</strong> Aplikasi ini dirancang menggunakan kecerdasan buatan (A.I) untuk membantu Tim Kurikulum menyusun jadwal KBM (Kegiatan Belajar Mengajar) maupun Ujian (PTS/PAS) secara otomatis, bebas bentrok, dan efisien.</p>
+        <p>Aplikasi ini terdiri dari <strong>4 Langkah Utama</strong> yang bisa Anda akses melalui menu di sebelah kiri layar. Harap ikuti langkah-langkah ini secara berurutan dari atas ke bawah.</p>
+
+        <h2>📁 Tahap 1: Mengatur Data Rombel (Menu 1)</h2>
+        <p>Langkah pertama adalah mendefinisikan struktur kelas atau rombongan belajar yang ada di sekolah.</p>
+        <ol>
+            <li><strong>Tingkat/Jenjang Kelas:</strong> Masukkan daftar tingkat (misal: <code>X, XI, XII</code> atau <code>7, 8, 9</code>), pisahkan dengan koma.</li>
+            <li><strong>Rincian Jurusan:</strong> Sistem akan memunculkan form jurusan. Masukkan nama jurusan (misal: <code>IPA, IPS, Agama</code>). Jika tidak ada jurusan, ketik <code>Tidak Ada</code>.</li>
+            <li><strong>Jumlah Kelas Paralel:</strong> Masukkan ada berapa kelas untuk masing-masing jurusan tersebut (misal: 5 kelas IPA, 3 kelas IPS).</li>
+            <li><strong>Pemisahan Gender (PA/PI):</strong> Tentukan berapa jumlah kelas Putra (PA) dan Putri (PI) dari total kelas paralel tersebut.</li>
+            <li><strong>Simpan & Lanjutkan:</strong> Klik tombol besar <strong>"Simpan & Lanjutkan ➔"</strong> di bagian bawah layar.</li>
+        </ol>
+
+        <h2>📚 Tahap 2: Matriks Mata Pelajaran (Menu 2)</h2>
+        <p>Di sini Anda akan memasukkan daftar mata pelajaran beserta jumlah Jam Pelajaran (JP) per minggunya.</p>
+        <ol>
+            <li><strong>Upload Matriks Mapel:</strong>
+                <ul>
+                    <li>Klik tombol <strong>📥 Download Template</strong> untuk mengunduh format Excel kosong.</li>
+                    <li>Buka Excel tersebut, isi nama mata pelajaran di kolom kiri, lalu isi angka beban JP di kolom kelas masing-masing.</li>
+                    <li>Setelah selesai, simpan Excel, lalu klik <strong>📤 Upload Excel Mapel</strong> untuk memasukkannya ke sistem.</li>
+                    <li><em>Tip:</em> Anda juga bisa mengubah angka JP langsung di dalam tabel aplikasi (perubahan akan tersimpan otomatis).</li>
+                </ul>
+            </li>
+            <li><strong>Waktu Mapel Khusus (Opsional):</strong> Gunakan fitur ini jika ada mapel yang <strong>wajib</strong> diletakkan di hari dan jam tertentu (misalnya: Upacara wajib di hari Senin Jam ke-1).</li>
+            <li><strong>Ruangan Tunggal/Khusus Terbatas (Opsional):</strong> Gunakan fitur ini untuk mapel yang menggunakan ruangan khusus seperti <em>Olahraga</em> atau <em>Komputer</em>. A.I akan memastikan tidak ada 2 kelas yang melakukan mapel ini di jam yang bersamaan.</li>
+            <li>Klik tombol besar <strong>"Simpan Semua Data Mapel ➔"</strong> di bagian bawah.</li>
+        </ol>
+
+        <h2>👥 Tahap 3: Matriks Guru & Batasan Waktu (Menu 3)</h2>
+        <p>Tahap ini digunakan untuk mengatur beban mengajar dan jadwal izin/libur para guru.</p>
+        <ol>
+            <li><strong>Upload Data Guru:</strong>
+                <ul>
+                    <li>Klik <strong>📥 Download Template</strong> Excel.</li>
+                    <li>Isi <em>Nama Guru</em>, <em>Mata Pelajaran</em> yang diampu (jika lebih dari satu, pisahkan dengan koma), dan <em>Target</em> (ketik <code>PA</code>, <code>PI</code>, atau <code>BEBAS</code>).</li>
+                    <li>Biarkan kolom beban mengajar kelas kosong jika Anda ingin menggunakan fitur pembagian otomatis.</li>
+                    <li>Upload file tersebut menggunakan tombol <strong>📤 Upload Excel Guru</strong>.</li>
+                </ul>
+            </li>
+            <li><strong>Fitur 🪄 Auto-Distribusi JP (Sangat Disarankan!):</strong><br>
+                Klik tombol ini agar sistem secara cerdas membagikan jam mengajar secara adil kepada setiap guru berdasarkan total JP Mapel yang dibutuhkan kelas dan target gender (PA/PI) guru tersebut.</li>
+            <li><strong>Batasan Waktu Guru (Izin/Libur):</strong><br>
+                Jika ada guru yang berhalangan hadir di hari tertentu (misal: Guru A libur hari Jumat) atau di jam tertentu (misal: Rapat di hari Rabu Jam 1 & 2), atur melalui form ini agar A.I tidak menaruh jadwal di waktu tersebut.</li>
+            <li>Klik tombol besar <strong>"Simpan & Perbarui Daftar Guru ➔"</strong> di bagian bawah.</li>
+        </ol>
+
+        <h2>🚀 Tahap 4: Mesin Generate A.I (Menu 4)</h2>
+        <p>Ini adalah otak utama aplikasi. Anda siap mencetak jadwal di sini!</p>
+        
+        <h3>1. Memilih Mode dan Waktu</h3>
+        <ul>
+            <li><strong>Mode Jadwal:</strong> Pilih antara <em>Jadwal Reguler (KBM)</em>, <em>Ujian PTS</em>, atau <em>Ujian PAS</em>.</li>
+            <li><strong>Setting Waktu:</strong> Tentukan <strong>Total Hari</strong> (standarnya 6 hari) dan <strong>JP/Hari</strong> (standarnya 9 JP per hari untuk KBM).</li>
+        </ul>
+
+        <h3>2. Memilih Engine Algoritma</h3>
+        <p>Jika Anda memilih mode KBM, Anda bisa memilih cara kerja mesin A.I:</p>
+        <ul>
+            <li><strong>🎲 1. Monte Carlo (Super Cepat):</strong> Cocok untuk percobaan awal, selesai dalam 1-2 detik.</li>
+            <li><strong>🔄 2. Monte Carlo + Swapping:</strong> Sedikit lebih lama, namun A.I akan mencoba membongkar pasang jadwal jika menemukan jalan buntu.</li>
+            <li><strong>🧬 3. Algoritma Genetika:</strong> Paling akurat. A.I akan menciptakan ratusan kemungkinan jadwal dan mengawinkannya untuk mencari solusi paling sempurna tanpa bentrok.</li>
+        </ul>
+        <p>Klik <strong>✨ GENERATE JADWAL SEKARANG</strong> dan tunggu animasi loading selesai.</p>
+
+        <h2>🛠️ Membaca dan Memodifikasi Hasil Jadwal</h2>
+        <p>Setelah A.I selesai bekerja, Anda akan melihat beberapa Tab Hasil:</p>
+        <ul>
+            <li><strong>📅 Jadwal Kelas:</strong> Tampilan jadwal per kelas.</li>
+            <li><strong>👨‍🏫 Jadwal Guru:</strong> Tampilan jadwal mengajar per guru.</li>
+            <li><strong>📊 Rekap JP:</strong> Laporan total jam mengajar masing-masing guru.</li>
+            <li><strong>⚠️ Log Analisis:</strong> Jika A.I gagal menyusun sebagian kecil jadwal, cek tab ini untuk mengetahui alasannya.</li>
+        </ul>
+
+        <h3>Fitur Pindah Jadwal Manual (Drag & Drop) 🖐️</h3>
+        <p>Ingin menukar posisi mata pelajaran?</p>
+        <ol>
+            <li>Cukup <strong>Klik, Tahan, dan Geser (Drag)</strong> kotak mata pelajaran ke kotak jam lainnya.</li>
+            <li><em>Smart Validation:</em> Sistem akan otomatis menolak dan memberi peringatan jika perpindahan tersebut menyebabkan bentrok jadwal guru atau melanggar jam izin guru!</li>
+        </ol>
+
+        <h3>Cetak dan Ekspor 🖨️</h3>
+        <p>Di setiap tab hasil, terdapat tombol <strong>⬇️ EXCEL (.xlsx)</strong> untuk menyimpan jadwal ke komputer dan tombol <strong>🖨️ PRINT</strong> untuk mencetaknya langsung ke printer (lengkap dengan kop surat pesantren).</p>
+
+        <h2>💾 Menyimpan & Memulihkan Data (Sangat Penting)</h2>
+        <ol>
+            <li><strong>Menyimpan Versi Jadwal:</strong><br>
+                Di Menu 4 (Mesin Generate), klik tombol <strong>"💾 Simpan Hasil Jadwal Ini"</strong> untuk menyimpan hasil generate agar tidak hilang. Anda bisa me-load nya kembali kapan saja di kolom "Versi Tersimpan".</li>
+            <li><strong>Backup Data Seluruh Sistem:</strong><br>
+                Gunakan tombol <strong>"⬇️ Backup Data"</strong> di menu paling kiri bawah secara berkala. Ini akan menyimpan <em>seluruh</em> data rombel, mapel, guru, dan batasan dalam 1 file kecil ke laptop Anda.</li>
+            <li><strong>Restore Data:</strong><br>
+                Jika Anda membuka aplikasi di laptop lain atau tidak sengaja menghapus data, cukup klik <strong>"⬆️ Restore Data"</strong> dan masukkan file backup tadi. Seluruh pekerjaan Anda akan kembali utuh dalam 1 detik!</li>
+        </ol>
+
+    </div>
+
+    <script>
+        // Logika untuk mendeteksi apakah dibuka di tab baru atau dari tab yang sama
+        if (window.opener) {
+            document.getElementById('btnTutup').style.display = 'inline-flex';
+            document.getElementById('btnKembali').style.display = 'none';
+        }
+        
+        // Cek Dark Mode dari localStorage agar otomatis serasi dengan aplikasi
+        if(localStorage.getItem('themePref') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
