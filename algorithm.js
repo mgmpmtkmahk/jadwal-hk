@@ -824,13 +824,13 @@ function eksekusiAlgoritmaJadwal(tipeAlgoritma) {
 
                 if(slot) {
                     let classExtra = slot.guru === "BELUM DISET" ? "cell-kosong" : "";
-                    // TAMBAHAN: Memasang sensor data-hari, data-jam, dan data-kelas
                     htmlHasil += `<td id="${cellId}" class="cell-jadwal ${classExtra}" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dropCell(event, '${kf.id}')" data-hari="${h}" data-jam="${j}" data-kelas="${kf.id}">
-                        <span class="mapel-name">${slot.mapel}</span><span class="guru-name">${slot.guru}</span>
+                        <div class="mapel-name">${slot.mapel}</div>
+                        <div class="guru-name">${slot.guru}</div>
                     </td>`;
                 } else {
                     htmlHasil += `<td id="${cellId}" class="cell-jadwal" style="color:#94a3b8; background:#f8fafc;" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dropCell(event, '${kf.id}')" data-hari="${h}" data-jam="${j}" data-kelas="${kf.id}">
-                        Kosong / Istirahat
+                        -
                     </td>`;
                 }
             });
@@ -860,7 +860,10 @@ function eksekusiAlgoritmaJadwal(tipeAlgoritma) {
             htmlGuru += `<tr><td style="text-align:center;"><strong>Jam ${j}</strong></td>`;
             namaHari.forEach(h => {
                 let slot = jadwalGuru[guruName][h][j];
-                if(slot) { htmlGuru += `<td class="cell-jadwal"><span class="mapel-name">${slot.kelas}</span><span class="guru-name">${slot.mapel}</span></td>`;
+                if(slot) { htmlGuru += `<td class="cell-jadwal">
+                    <div class="mapel-name">${slot.kelas}</div>
+                    <div class="guru-name">${slot.mapel}</div>
+                </td>`;
                 } else htmlGuru += `<td class="cell-jadwal" style="color:#94a3b8; background:#f8fafc;">-</td>`;
             });
             htmlGuru += `</tr>`;

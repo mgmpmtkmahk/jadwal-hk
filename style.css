@@ -177,8 +177,22 @@ tr:hover td { background-color: #f8fafc; }
 .jadwal-wrapper th:first-child { z-index: 12; background: #f1f5f9; }
 .cell-jadwal { font-size: 13px; padding: 12px !important; cursor: grab; background: white; transition: 0.2s; border: 1px solid #f1f5f9;}
 .cell-jadwal:hover { background: #f0fdfa; transform: scale(1.02); z-index: 5; position: relative; box-shadow: var(--shadow-md); border-radius: 8px; border-color: #cbd5e1;}
-.mapel-name { font-weight: 800; display: block; color: var(--dark); margin-bottom: 6px; font-size: 14.5px;}
-.guru-name { color: var(--text-muted); font-size: 12px; font-weight: 600; background: #f1f5f9; padding: 2px 8px; border-radius: 12px; display: inline-block;}
+.mapel-name {
+    display: block; 
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+.guru-name {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 8px;
+    background: #e2e8f0;
+    color: var(--text-main);
+}
 
 /* =========================================
    DASHBOARD STATISTIK & TABS
@@ -433,24 +447,42 @@ body.dark-mode .btn-action { color: white !important; }
 body.dark-mode .global-kop-surat * { color: #000 !important; } /* Kop surat khusus print tetap hitam */
 
 /* =========================================
-   CETAK (PRINT) - DIKEMBALIKAN
+   PENGATURAN SUPER CETAK (PRINT & PDF)
    ========================================= */
 @media print {
-    @page { size: landscape; margin: 10mm; }
-    .sidebar, .topbar, .global-actions, .action-buttons, .tabs, .dashboard-grid, .sticky-action-bar { display: none !important; }
-    .dashboard-layout { display: block; height: auto; overflow: visible; border: none; box-shadow: none; background: white;}
-    .main-content { background: white; padding: 0; }
-    .page-container { padding: 0; overflow: visible; }
-    .card-box { border: none; box-shadow: none; padding: 0; margin: 0; }
-    .page-content { display: none !important; }
-    #menu-generate { display: block !important; max-width: 100% !important; padding: 0 !important; }
-    .jadwal-wrapper { border: none; box-shadow: none; max-height: none; overflow: visible; margin-bottom: 20px;}
-    .jadwal-wrapper th, .jadwal-wrapper td:first-child { position: static; box-shadow: none; }
-    table { width: 100%; border: 1px solid #000; }
-    th, td { border: 1px solid #000; color: #000 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
-    th { background: #e2e8f0 !important; }
-    #tab-analisis { display: none !important; }
-    .global-kop-surat { display: block !important; }
+    /* 1. Paksa Kertas Landscape */
+    @page {
+        size: landscape;
+        margin: 12mm;
+    }
+
+    /* 2. Paksa Printer Mencetak Warna Background (Agar mirip layar) */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 3. Pastikan Warna Teks dan Background Tabel Jelas */
+    .guru-name {
+        background: #e2e8f0 !important; /* Warna abu-abu lembut */
+        color: #334155 !important;
+        border: none !important;
+        padding: 3px 6px !important;
+    }
+    .mapel-name { color: #000000 !important; } /* Tinta hitam pekat */
+
+    /* 4. Cegah Tabel Terbelah di Dua Halaman */
+    .table-container, .tabel-jadwal, .card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 5. Rapikan Jarak Sel */
+    .cell-jadwal {
+        padding: 6px 4px !important;
+        vertical-align: middle !important; /* Posisi text rapi di tengah secara vertikal */
+    }
 }
 
 /* =========================================
