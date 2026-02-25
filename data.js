@@ -1,7 +1,6 @@
 // ==========================================
 // VARIABEL GLOBAL & STATE APLIKASI
 // ==========================================
-let currentStep = 1;
 let schoolData = { tingkat: [], jurusan: {}, paralel: {}, split: {}, mapel: [], guru: [], batasan: [] };
 let confirmCallback = null;
 
@@ -69,7 +68,8 @@ function uploadProgressFile(event) {
 
 function cleanDraft() { 
     showConfirmModal("Anda yakin ingin menghapus semua form dan tabel? Halaman akan di-refresh.", () => { 
-        localStorage.clear(); location.reload(); 
+        localStorage.removeItem('wizardData');
+        location.reload(); 
     }); 
 }
 

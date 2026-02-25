@@ -31,17 +31,36 @@ document.addEventListener("DOMContentLoaded", () => {
     if(elThn) elThn.innerText = `Tahun Ajaran ${thnGlobal}/${thnGlobal + 1}`;
 });
 
+
+function escapeHTML(str) {
+    return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+}
+
 function showAlert(msg, type='error') {
     const c = document.getElementById('toast-container');
-    if(!c) return; 
+    if(!c) return;
     const t = document.createElement('div');
     let icon = type==='success' ? '✅' : (type==='warning' ? '⚠️' : '❌');
-    t.className = `toast ${type}`; 
-    t.innerHTML = `<span style="font-size: 1.2em;">${icon}</span> <span>${msg}</span>`;
-    c.appendChild(t); 
-    setTimeout(() => { 
-        t.classList.add('fade-out'); 
-        setTimeout(() => t.remove(), 400); 
+    t.className = `toast ${type}`;
+
+    const sIcon = document.createElement("span");
+    sIcon.style.fontSize = "1.2em";
+    sIcon.textContent = icon;
+
+    const sMsg = document.createElement("span");
+    sMsg.textContent = String(msg);
+
+    t.replaceChildren(sIcon, document.createTextNode(" "), sMsg);
+
+    c.appendChild(t);
+    setTimeout(() => {
+        t.classList.add('fade-out');
+        setTimeout(() => t.remove(), 400);
     }, 3000);
 }
 
@@ -184,7 +203,7 @@ function prepareNextStepData(ns) {
     else if(ns===7){
         let opts = '<option value="">-- Pilih Guru Dulu --</option>';
         let sortedGuru = [...new Set(schoolData.guru.map(g=>g.nama))].sort();
-        sortedGuru.forEach(g => { opts += `<option value="${g}">${g}</option>`; });
+        sortedGuru.forEach(g => { opts += `<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`; });
         document.getElementById('restrictGuru').innerHTML = opts;
         renderBatasan();
     }
@@ -299,19 +318,19 @@ window.renderTabelMapel = function() {
     const uCls = [...new Set(schoolData.mapel.map(m=>m.kelas))];
     const uMap = [...new Set(schoolData.mapel.map(m=>m.mapel))];
     
-    let h = `<div style="overflow-x:auto;"><table class="table-preview table-mapel"><tr><th style="text-align:center;">Mata Pelajaran</th>${uCls.map(c=>`<th style="text-align:center;">${c}</th>`).join('')}</tr>`;
+    let h = `<div style="overflow-x:auto;"><table class="table-preview table-mapel"><tr><th style="text-align:center;">Mata Pelajaran</th>${uCls.map(c=>`<th style="text-align:center;">${escapeHTML(c)}</th>`).join('')}</tr>`;
     
     uMap.forEach(m => { 
-        h += `<tr><td>${m}</td>${uCls.map(c => { 
+        h += `<tr><td>${escapeHTML(m)}</td>${uCls.map(c => { 
             const d = schoolData.mapel.find(x=>x.mapel === m && x.kelas === c); 
             let jpVal = d ? d.jp : 0;
             // Input box keren dengan fungsi update tanpa re-render (agar kursor tidak hilang saat mengetik)
-            return `<td><input type="number" min="0" style="width:50px; text-align:center; padding:5px; border:1px solid #cbd5e1; border-radius:4px; font-weight:600; color:var(--primary);" value="${jpVal}" onchange="updateJPMapel('${m}', '${c}', this.value)" onkeyup="updateJPMapel('${m}', '${c}', this.value)"></td>`; 
+            return `<td><input type="number" min="0" style="width:50px; text-align:center; padding:5px; border:1px solid #cbd5e1; border-radius:4px; font-weight:600; color:var(--primary);" value="${jpVal}" onchange="updateJPMapel(${JSON.stringify(m)}, ${JSON.stringify(c)}, this.value)" onkeyup="updateJPMapel(${JSON.stringify(m)}, ${JSON.stringify(c)}, this.value)"></td>`; 
         }).join('')}</tr>`; 
     });
     // TAMBAHAN: Update dropdown Kunci Mapel
     let opts = '<option value="">-- Pilih Mapel --</option>';
-    uMap.forEach(m => opts += `<option value="${m}">${m}</option>`);
+    uMap.forEach(m => opts += `<option value="${escapeHTML(m)}">${escapeHTML(m)}</option>`);
     let lockDropdown = document.getElementById('lockMapel');
     if(lockDropdown) lockDropdown.innerHTML = opts;
     if(typeof renderLockMapel === 'function') renderLockMapel();
@@ -385,7 +404,7 @@ window.updateJPGuru = function(guruIdx, kelas, value) {
     schoolData.guru[guruIdx].total = tot;
     
     let elTotal = document.getElementById(`total_guru_${guruIdx}`);
-    if(elTotal) elTotal.innerHTML = `<strong>${tot}</strong>`;
+    if(elTotal) elTotal.textContent = String(tot);
 }
 
 window.renderTabelGuru = function() {
@@ -394,20 +413,20 @@ window.renderTabelGuru = function() {
     schoolData.guru.forEach(g=>Object.keys(g.rincian).forEach(k=>setCls.add(k))); 
     const uCls = Array.from(setCls);
     
-    let h=`<div style="overflow-x:auto;"><table class="table-preview table-guru"><tr><th style="text-align:center;">Nama Guru</th><th style="text-align:center;">Mata Pelajaran</th><th style="text-align:center;">Fokus Kelas</th>${uCls.map(c=>`<th style="text-align:center;">${c}</th>`).join('')}<th style="text-align:center; width:80px;">Total JP</th></tr>`;
+    let h=`<div style="overflow-x:auto;"><table class="table-preview table-guru"><tr><th style="text-align:center;">Nama Guru</th><th style="text-align:center;">Mata Pelajaran</th><th style="text-align:center;">Fokus Kelas</th>${uCls.map(c=>`<th style="text-align:center;">${escapeHTML(c)}</th>`).join('')}<th style="text-align:center; width:80px;">Total JP</th></tr>`;
     
     schoolData.guru.forEach((g, idx) => { 
         let badgeColor = g.target==='PA' ? '#3b82f6' : (g.target==='PI' ? '#ec4899' : '#64748b');
         let targetBadge = `<span style="background:${badgeColor}; color:white; padding:2px 6px; border-radius:4px; font-size:10px;">${g.target}</span>`;
         
         h+=`<tr>
-                <td>${g.nama}</td>
-                <td>${g.mapels}</td>
+                <td>${escapeHTML(g.nama)}</td>
+                <td>${escapeHTML(g.mapels)}</td>
                 <td>${targetBadge}</td>`;
                 
         uCls.forEach(c => {
             let jpVal = g.rincian[c] || 0;
-            h+=`<td><input type="number" min="0" style="width:50px; text-align:center; padding:5px; border:1px solid #cbd5e1; border-radius:4px; font-weight:600; color:var(--primary);" value="${jpVal}" onchange="updateJPGuru(${idx}, '${c}', this.value)" onkeyup="updateJPGuru(${idx}, '${c}', this.value)"></td>`;
+            h+=`<td><input type="number" min="0" style="width:50px; text-align:center; padding:5px; border:1px solid #cbd5e1; border-radius:4px; font-weight:600; color:var(--primary);" value="${jpVal}" onchange="updateJPGuru(${idx}, ${JSON.stringify(c)}, this.value)" onkeyup="updateJPGuru(${idx}, ${JSON.stringify(c)}, this.value)"></td>`;
         });
         
         h+=`<td id="total_guru_${idx}"><strong>${g.total}</strong></td></tr>`; 

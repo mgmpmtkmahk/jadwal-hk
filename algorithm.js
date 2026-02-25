@@ -1,6 +1,8 @@
 // ==========================================
 // ALGORITMA 1: AUTO-DISTRIBUSI GURU
 // ==========================================
+const DEBUG_ALGO = false;
+
 window.autoDistribusiGuru = function() {
     if(!schoolData.mapel || schoolData.mapel.length === 0) {
         return showAlert("Data Mapel (Menu 2) masih kosong!", "error");
@@ -681,7 +683,7 @@ function eksekusiAlgoritmaJadwal(tipeAlgoritma) {
             }
             population = newPopulation;
         }
-        console.log(`GA Selesai. Error Terkecil: ${minErrors}`);
+        if (DEBUG_ALGO) console.log(`GA Selesai. Error Terkecil: ${minErrors}`);
 
     } else {
         // --- 🎲 1 & 2. MONTE CARLO DASAR / LOCAL SEARCH ---
@@ -773,7 +775,7 @@ function eksekusiAlgoritmaJadwal(tipeAlgoritma) {
         finalUnplacedTasks.forEach(u => {
             bestResult.log.push({ kelas: u.tugas.kelasId, mapel: u.tugas.mapel, butuh: "Blok " + u.tugas.durasi + " JP", alasan: u.logMsg });
         });
-        if (swappedCount > 0) console.log(`Local Search memperbaiki ${swappedCount} jadwal!`);
+        if (swappedCount > 0 && DEBUG_ALGO) console.log(`Local Search memperbaiki ${swappedCount} jadwal!`);
     } else {
         bestResult.log = [...logPemetaanAwal];
         bestResult.unplaced.forEach(u => {

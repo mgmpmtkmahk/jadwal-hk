@@ -6,7 +6,28 @@
     <title>Sistem Generator Jadwal Sekolah Terpadu</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+/**
+ * XLSX loader (offline-first):
+ * - tries local vendor build first: ./vendor/xlsx.full.min.js
+ * - falls back to CDN if local is missing
+ */
+(function loadXLSX(){
+  const head = document.head || document.getElementsByTagName('head')[0];
+  function inject(src){
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      head.appendChild(s);
+    });
+  }
+  inject('./vendor/xlsx.full.min.js')
+    .catch(() => inject('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'))
+    .catch(() => console.error('Gagal memuat XLSX (lokal maupun CDN). Import Excel tidak akan berfungsi.'));
+})();
+</script>
 </head>
 <body>
 

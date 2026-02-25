@@ -483,6 +483,66 @@ body.dark-mode .global-kop-surat * { color: #000 !important; } /* Kop surat khus
         padding: 6px 4px !important;
         vertical-align: middle !important; /* Posisi text rapi di tengah secara vertikal */
     }
+
+    /* =========================================
+       PRINT BERSIH: SEMBUNYIKAN UI APLIKASI
+       (untuk tombol PRINT global / window.print)
+       ========================================= */
+
+    /* Hilangkan elemen navigasi & kontrol */
+    .sidebar,
+    .topbar,
+    .sidebar-nav,
+    .sidebar-footer,
+    .user-profile,
+    .sticky-action-bar,
+    .action-buttons,
+    .btn-action,
+    .btn-sm,
+    .nav-btn,
+    #toast-container,
+    .modal,
+    .modal-overlay,
+    .modal-backdrop,
+    .confirm-modal,
+    .confirm-overlay,
+    button,
+    input,
+    select,
+    textarea,
+    label {
+        display: none !important;
+    }
+
+    /* Pastikan hanya halaman aktif yang tercetak */
+    .page-content { display: none !important; }
+    .page-content.active { display: block !important; }
+
+    /* Rapikan layout supaya full halaman */
+    body {
+        background: #ffffff !important;
+        margin: 0 !important;
+    }
+    .app-wrapper,
+    .dashboard-layout,
+    .main-content,
+    .page-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+    }
+
+    /* Tampilkan kembali elemen konten yang relevan */
+    .page-header,
+    .card-box,
+    .card,
+    .preview-box,
+    .table-container,
+    .tabel-jadwal {
+        display: block !important;
+    }
 }
 
 /* =========================================
